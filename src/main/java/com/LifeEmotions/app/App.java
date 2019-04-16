@@ -10,64 +10,64 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.*;
 import java.util.Iterator;
 
-public class App
-{
-    private static  String XML_FILE_NAME; //= "C:\\Users\\nuno.martins\\IdeaProjects\\ETSgroupAddressCSVgenetartor\\ETSgroupAddressCSVgenetartor\\files\\Group Address Generator Inputs.xlsx";
-    private static  String CSV_FILE_NAME;// = "C:\\Users\\nuno.martins\\IdeaProjects\\ETSgroupAddressCSVgenetartor\\ETSgroupAddressCSVgenetartor\\files\\test.csv";
+        public class App
+        {
+            private static  String XLS_FILE_NAME= "C:\\Users\\nuno.martins\\IdeaProjects\\ETSgroupAddressCSVgenetartor\\ETSgroupAddressCSVgenetartor\\files\\Group Address Generator Inputs.xlsx";
+            private static  String CSV_FILE_NAME = "C:\\Users\\nuno.martins\\IdeaProjects\\ETSgroupAddressCSVgenetartor\\ETSgroupAddressCSVgenetartor\\files\\test.csv";
 
 
-    public static void main( String[] args )
-    {
+            public static void main( String[] args ){
 
-        XML_FILE_NAME = args[0];
-        CSV_FILE_NAME = args[1];
+                //XLS_FILE_NAME = args[0];
+                //CSV_FILE_NAME = args[1];
 
-        try {
+                try {
 
-            PrintWriter writer = new PrintWriter(new File(CSV_FILE_NAME));
-            StringBuilder sb = new StringBuilder();
+                    PrintWriter writer = new PrintWriter(new File(CSV_FILE_NAME));
+                    StringBuilder sb;
 
-            FileInputStream excelFile = new FileInputStream(new File(XML_FILE_NAME));
-            Workbook workbook = new XSSFWorkbook(excelFile);
+                    FileInputStream excelFile = new FileInputStream(new File(XLS_FILE_NAME));
+                    Workbook workbook = new XSSFWorkbook(excelFile);
 
-            Iterator<Sheet> sheetIterator = workbook.sheetIterator();
+                    Iterator<Sheet> sheetIterator = workbook.sheetIterator();
+                    System.out.println("\n######################## Parsing file " + XLS_FILE_NAME+ "########################\n");
 
+                    while (sheetIterator.hasNext()) {
 
-            while (sheetIterator.hasNext()) {
+                        Sheet currentSheet = sheetIterator.next();
+                        System.out.println("\n############ Parsing sheet " +": "+ currentSheet.getSheetName()+" ############\n");
 
-                Sheet currentSheet = sheetIterator.next();
-                System.out.println("\n############ Parsing sheet " +": "+ currentSheet.getSheetName()+" ############\n");
+                        Iterator<Row> rowIterator = currentSheet.iterator();
 
-                Iterator<Row> rowIterator = currentSheet.iterator();
+                        while (rowIterator.hasNext()) {
 
-                while (rowIterator.hasNext()) {
+                            Row currentRow = rowIterator.next();
 
-                    Row currentRow = rowIterator.next();
-                    if (currentRow.getLastCellNum()>5){
+                            if (currentRow.getLastCellNum()>5 && !currentRow.getCell(5).getStringCellValue().isEmpty()){
 
-                        sb=new StringBuilder();
+                                sb=new StringBuilder();
 
-                        sb.append("\" \",");
-                        sb.append("\" \",");
+                                sb.append("\" \",");
+                                sb.append("\" \",");
 
-                        String cell_C = currentRow.getCell(2).getStringCellValue();
-                        if (cell_C.isEmpty()){
-                            cell_C="EMPTY";
-                        }
-                        sb.append('\"' + cell_C +'\"' + ",");
+                                String cell_C = currentRow.getCell(2).getStringCellValue();
+                                if (cell_C.isEmpty()){
+                                    cell_C="EMPTY";
+                                }
+                                sb.append('\"' + cell_C +'\"' + ",");
 
-                        String cell_F = currentRow.getCell(5).getStringCellValue();
-                        sb.append('\"' + cell_F +'\"'+ ",");
-                        sb.append("\" \",");
-                        sb.append("\" \",");
-                        sb.append("\" \",");
-                        sb.append("\" \",");
-                        sb.append("\"Auto\"");
+                                String cell_F = currentRow.getCell(5).getStringCellValue();
+                                sb.append('\"' + cell_F +'\"'+ ",");
+                                sb.append("\" \",");
+                                sb.append("\" \",");
+                                sb.append("\" \",");
+                                sb.append("\" \",");
+                                sb.append("\"Auto\"");
 
-                        System.out.println(sb.toString());
-                        writer.write(sb.append('\n').toString());
+                                System.out.println(sb.toString());
+                                writer.write(sb.append('\n').toString());
+                         }
                     }
-                }
             }
             writer.close();
             System.out.println("\n######################## Parsing Successfully ########################\n");
