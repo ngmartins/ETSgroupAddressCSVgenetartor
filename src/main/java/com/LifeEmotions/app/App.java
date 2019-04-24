@@ -12,8 +12,8 @@ import java.util.Iterator;
 
         public class App
         {
-            private static  String XLS_FILE_NAME= "C:\\Users\\nuno.martins\\IdeaProjects\\ETSgroupAddressCSVgenetartor\\ETSgroupAddressCSVgenetartor\\files\\Group Address Generator Inputs.xlsx";
-            private static  String CSV_FILE_NAME = "C:\\Users\\nuno.martins\\IdeaProjects\\ETSgroupAddressCSVgenetartor\\ETSgroupAddressCSVgenetartor\\files\\test.csv";
+            private static  String XLS_FILE_NAME= "C:\\Users\\nuno.martins\\IdeaProjects\\ETSgroupAddressCSVgenetartor\\ETSgroupAddressCSVgenetartor\\testFiles\\RHLES_ListaPontos_v7.4forETS.xlsx";
+            private static  String CSV_FILE_NAME = "C:\\Users\\nuno.martins\\IdeaProjects\\ETSgroupAddressCSVgenetartor\\ETSgroupAddressCSVgenetartor\\testFiles\\RHLES_ListaPontos_v7.4forETS.csv";
 
 
             public static void main( String[] args ){
@@ -23,14 +23,14 @@ import java.util.Iterator;
 
                 try {
 
-                    PrintWriter writer = new PrintWriter(new File(CSV_FILE_NAME));
+                    PrintWriter writer = new PrintWriter(new File(CSV_FILE_NAME),"UTF-8");
                     StringBuilder sb;
 
                     FileInputStream excelFile = new FileInputStream(new File(XLS_FILE_NAME));
                     Workbook workbook = new XSSFWorkbook(excelFile);
 
                     Iterator<Sheet> sheetIterator = workbook.sheetIterator();
-                    System.out.println("\n######################## Parsing file " + XLS_FILE_NAME+ "########################\n");
+                    System.out.println("\n######################## Parsing file " + XLS_FILE_NAME + "########################\n");
 
                     while (sheetIterator.hasNext()) {
 
@@ -43,6 +43,11 @@ import java.util.Iterator;
 
                             Row currentRow = rowIterator.next();
 
+                            System.out.println(">> Row Number: "+ currentRow.getRowNum()+" processed..");
+                            //System.out.println(">> Last cell: " +currentRow.getLastCellNum());
+
+
+
                             if (currentRow.getLastCellNum()>5 && !currentRow.getCell(5).getStringCellValue().isEmpty()){
 
                                 sb=new StringBuilder();
@@ -51,10 +56,17 @@ import java.util.Iterator;
                                 sb.append("\" \",");
 
                                 String cell_C = currentRow.getCell(2).getStringCellValue();
-                                if (cell_C.isEmpty()){
-                                    cell_C="EMPTY";
+                                String cell_D = currentRow.getCell(3).getStringCellValue();
+
+                                if (!cell_C.isEmpty() && !cell_D.isEmpty()){
+                                    sb.append('\"' + cell_C +" - " +cell_D +'\"' + ",");
+                                }else if (cell_C.isEmpty() && !cell_D.isEmpty()){
+                                    sb.append('\"' + cell_D +'\"' + ",");
+                                }else if (!cell_C.isEmpty() && cell_D.isEmpty()){
+                                    sb.append('\"' + cell_C +'\"' + ",");
+                                }else if (cell_C.isEmpty() && cell_D.isEmpty()){
+                                    sb.append('\"' + "EMPTY" +'\"' + ",");
                                 }
-                                sb.append('\"' + cell_C +'\"' + ",");
 
                                 String cell_F = currentRow.getCell(5).getStringCellValue();
                                 sb.append('\"' + cell_F +'\"'+ ",");
@@ -64,7 +76,7 @@ import java.util.Iterator;
                                 sb.append("\" \",");
                                 sb.append("\"Auto\"");
 
-                                System.out.println(sb.toString());
+                                System.out.println(">> Generate CSV line: " + sb.toString());
                                 writer.write(sb.append('\n').toString());
                          }
                     }
