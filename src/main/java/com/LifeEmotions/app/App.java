@@ -12,16 +12,33 @@ import java.util.Iterator;
 
         public class App
         {
-            private static  String XLS_FILE_NAME= "C:\\Users\\nuno.martins\\IdeaProjects\\ETSgroupAddressCSVgenetartor\\ETSgroupAddressCSVgenetartor\\testFiles\\RHLES_ListaPontos_v7.4forETS.xlsx";
-            private static  String CSV_FILE_NAME = "C:\\Users\\nuno.martins\\IdeaProjects\\ETSgroupAddressCSVgenetartor\\ETSgroupAddressCSVgenetartor\\testFiles\\RHLES_ListaPontos_v7.4forETS.csv";
+            private static  String XLS_FILE_NAME;
+            private static  String CSV_FILE_NAME;
 
 
             public static void main( String[] args ){
 
-                //XLS_FILE_NAME = args[0];
-                //CSV_FILE_NAME = args[1];
+                if (args.length!=2){
+                    System.out.println();
+                    System.out.println("###################################################################################################");
+                    System.out.println("Error running the CSV generator!");
+                    System.out.println("Please copy the XML file to JAR directory. Then try to run:");
+                    System.out.println("");
+                    System.out.println("java -jar ETSgroupAddressCSVgenetartor-1.0-jar-with-dependencies.jar [XML_file_name].xlsm [CSV_file_name_to_generate].csv");
+                    System.out.println();
+                    System.out.println("Note that you can use te command passing paths for the files as argument.\nIt will allows you to access and generate files in different directories.");
+                    System.out.println("###################################################################################################");
+                    System.out.println();
+
+                    return;
+                }
+
+                XLS_FILE_NAME = args[0];
+                CSV_FILE_NAME = args[1];
 
                 try {
+
+                    System.out.println("XML File is Readable - "+ new File(XLS_FILE_NAME).canRead() );
 
                     PrintWriter writer = new PrintWriter(new File(CSV_FILE_NAME),"UTF-8");
                     StringBuilder sb;

@@ -20,6 +20,7 @@ public class AppTest
     private   String CSV_FILE_TO_COMPARE = "C:\\Users\\nuno.martins\\IdeaProjects\\ETSgroupAddressCSVgenetartor\\ETSgroupAddressCSVgenetartor\\testFiles\\CSVComparsionFile.csv";
 
 
+
     @Test
     public void shouldAnswerWithTrue() throws IOException {
 
@@ -36,5 +37,17 @@ public class AppTest
         assertEquals("The content in the strings should match", Result, Expected);
     }
 
+    @Test
+    public void test() throws IOException {
 
+
+        int n= 5;
+        int totalSum = n;
+
+        for(int i=n-1; i>0; i--){
+            totalSum += i;
+        }
+
+        System.out.println(">>>>>>>> " + totalSum);
+    }
 }
